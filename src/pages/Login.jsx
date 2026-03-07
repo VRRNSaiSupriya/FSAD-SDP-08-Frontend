@@ -15,7 +15,6 @@ const Login = () => {
 
   const [error, setError] = useState("");
 
-  // ✅ Handle input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -23,7 +22,6 @@ const Login = () => {
     });
   };
 
-  // ✅ Validation
   const validateForm = () => {
     const emailRegex = /^[a-z0-9._%+-]+@gmail\.com$/;
     const passwordRegex =
@@ -45,7 +43,6 @@ const Login = () => {
     return true;
   };
 
-  // ✅ Login handler
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -53,7 +50,6 @@ const Login = () => {
 
     const role = login(formData.username, formData.password);
 
-    // ⭐ Safe role comparison
     if (role && role.toLowerCase() === formData.role.toLowerCase()) {
       if (role === "student") navigate("/student");
       else if (role === "teacher") navigate("/teacher");
@@ -65,53 +61,57 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login to PORTFOLIO-HUB</h2>
 
-      <form onSubmit={handleLogin} className="login-form">
-        {/* Email */}
-        <input
-          type="text"
-          name="username"
-          placeholder="Email"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
+      <div className="login-box">
 
-        {/* Password */}
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+        <h2>Login to PORTFOLIO-HUB</h2>
 
-        {/* Role */}
-        <select
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          required
-        >
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-        </select>
+        <form onSubmit={handleLogin} className="login-form">
 
-        {/* Error */}
-        {error && <p className="error">{error}</p>}
+          <input
+            type="text"
+            name="username"
+            placeholder="Email"
+            value={formData.username}
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">Login</button>
-      </form>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
-      <p>
-        <Link to="/forgot-password">Forgot Password?</Link>
-      </p>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            required
+          >
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+          </select>
 
-      <p>
-        Don't have an account? <Link to="/register">Register</Link>
-      </p>
+          {error && <p className="error">{error}</p>}
+
+          <button type="submit">Login</button>
+
+        </form>
+
+        <p className="login-links">
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </p>
+
+        <p className="login-links">
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
+
+      </div>
+
     </div>
   );
 };

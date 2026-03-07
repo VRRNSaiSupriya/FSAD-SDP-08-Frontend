@@ -1,36 +1,41 @@
 import { Link } from "react-router-dom";
-import student from "../assets/student.jpeg";
+import studentImg from "../assets/student.jpeg";
+import "../App.css";
 
 const StudentDashboard = () => {
   return (
-    <div className="dashboard">
-      <h1>Student Dashboard</h1>
+    <div className="dashboard-container">
 
-      <img src={student} className="dashboard-img" />
+      <h1 className="dashboard-title">Student Dashboard</h1>
 
-      <div className="dashboard-cards">
+      <div className="dashboard-top">
+        <img src={studentImg} alt="student" className="dashboard-img" />
+      </div>
 
-        <Link to="/courses" className="card">
+      <div className="dashboard-grid">
+
+        <div className="dashboard-card">
           <h3>📚 Courses</h3>
-          <p>View assigned courses</p>
-        </Link>
+          <Link to="/courses">View assigned courses</Link>
+        </div>
 
-        <Link to="/upload" className="card">
+        <div className="dashboard-card">
           <h3>📤 Assignment Submission</h3>
-          <p>Upload assignments</p>
-        </Link>
+          <Link to="/upload">Upload assignments</Link>
+        </div>
 
-        <Link to="/marks" className="card">
+        <div className="dashboard-card">
           <h3>📊 Marks</h3>
-          <p>Check your marks</p>
-        </Link>
+          <Link to="/marks">Check your marks</Link>
+        </div>
 
-        <Link to="/feedback" className="card">
+        <div className="dashboard-card">
           <h3>💬 Feedback</h3>
-          <p>Teacher feedback</p>
-        </Link>
+          <Link to="/feedback">Teacher feedback</Link>
+        </div>
 
       </div>
+
     </div>
   );
 };

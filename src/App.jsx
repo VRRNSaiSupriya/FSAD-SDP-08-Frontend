@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 
-/* ✅ Auth */
+/* Background Image */
+import background from "./assets/background.jpg";
+
+/* Auth */
 import { AuthProvider } from "./context/AuthContext";
 
-/* ✅ Navbar (REAL one from components folder) */
+/* Navbar */
 import Navbar from "./components/Navbar";
 
 /* Pages */
@@ -19,32 +22,42 @@ import Feedback from "./pages/Feedback";
 import Upload from "./pages/Upload";
 import ForgotPassword from "./pages/ForgotPassword";
 
-/* Main App */
 function App() {
   return (
     <AuthProvider>
       <Router>
-        <Navbar />
+        {/* Background Wrapper */}
+        <div
+          className="app-background"
+          style={{
+            backgroundImage: `url(${background})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            minHeight: "100vh"
+          }}
+        >
+          <Navbar />
 
-        <Routes>
-          {/* Home */}
-          <Route path="/" element={<Home />} />
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          {/* Auth */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+            {/* Auth */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Dashboards */}
-          <Route path="/student" element={<StudentDashboard />} />
-          <Route path="/teacher" element={<TeacherDashboard />} />
+            {/* Dashboards */}
+            <Route path="/student" element={<StudentDashboard />} />
+            <Route path="/teacher" element={<TeacherDashboard />} />
 
-          {/* Features */}
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/marks" element={<Marks />} />
-          <Route path="/feedback" element={<Feedback />} />
-          <Route path="/upload" element={<Upload />} />
-        </Routes>
+            {/* Features */}
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/marks" element={<Marks />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/upload" element={<Upload />} />
+          </Routes>
+        </div>
       </Router>
     </AuthProvider>
   );
