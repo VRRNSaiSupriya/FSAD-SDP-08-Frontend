@@ -4,11 +4,12 @@ import { useAuth } from "../context/AuthContext";
 import "../App.css";
 
 const Login = () => {
+
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
     role: "student",
   });
@@ -16,50 +17,34 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const validateForm = () => {
-    const emailRegex = /^[a-z0-9._%+-]+@gmail\.com$/;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-    if (!emailRegex.test(formData.username)) {
-      setError("Enter valid Gmail (example@gmail.com)");
-      return false;
-    }
-
-    if (!passwordRegex.test(formData.password)) {
-      setError(
-        "Password must contain uppercase, lowercase, number, symbol & min 8 chars"
-      );
-      return false;
-    }
-
-    setError("");
-    return true;
-  };
-
   const handleLogin = (e) => {
+
     e.preventDefault();
 
-    if (!validateForm()) return;
+    const role = login(formData.email, formData.password);
 
-    const role = login(formData.username, formData.password);
+    if (role && role === formData.role) {
 
-    if (role && role.toLowerCase() === formData.role.toLowerCase()) {
       if (role === "student") navigate("/student");
       else if (role === "teacher") navigate("/teacher");
       else if (role === "admin") navigate("/admin");
+
     } else {
-      setError("Role mismatch or invalid credentials");
+
+      setError("Invalid credentials or role mismatch");
+
     }
   };
 
   return (
+
     <div className="login-container">
 
       <div className="login-box">
@@ -69,10 +54,10 @@ const Login = () => {
         <form onSubmit={handleLogin} className="login-form">
 
           <input
-            type="text"
-            name="username"
+            type="email"
+            name="email"
             placeholder="Email"
-            value={formData.username}
+            value={formData.email}
             onChange={handleChange}
             required
           />
@@ -90,10 +75,10 @@ const Login = () => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            required
           >
             <option value="student">Student</option>
             <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
           </select>
 
           {error && <p className="error">{error}</p>}
@@ -103,11 +88,7 @@ const Login = () => {
         </form>
 
         <p className="login-links">
-          <Link to="/forgot-password">Forgot Password?</Link>
-        </p>
-
-        <p className="login-links">
-          Don't have an account? <Link to="/register">Register</Link>
+          <Link to="/register">Don't have an account? Register</Link>
         </p>
 
       </div>

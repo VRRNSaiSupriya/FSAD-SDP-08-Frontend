@@ -1,9 +1,12 @@
+// src/pages/Register.jsx
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../App.css";
 
-export default function Register() {
+function Register() {
+
   const navigate = useNavigate();
   const { register } = useAuth();
 
@@ -40,7 +43,7 @@ export default function Register() {
     }
 
     setError("");
-    setMessage("Registered successfully ✅");
+    setMessage("Registered Successfully ✅");
 
     setTimeout(() => {
       navigate("/login");
@@ -49,54 +52,60 @@ export default function Register() {
 
   return (
     <div className="login-container">
-      <h2>Register</h2>
 
-      <form onSubmit={handleRegister} className="login-form">
-        {/* Name */}
-        <input
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          required
-        />
+      <div className="login-box">
 
-        {/* Email */}
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+        <h2 className="form-title">Register</h2>
 
-        {/* Password */}
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
+        <form onSubmit={handleRegister} className="login-form">
 
-        {/* ⭐ ROLE SELECTOR */}
-        <select
-          name="role"
-          value={form.role}
-          onChange={handleChange}
-          required
-        >
-          <option value="student">Student</option>
-          <option value="teacher">Teacher</option>
-          <option value="admin">Admin</option>
-        </select>
+          <input
+            name="name"
+            placeholder="Name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
 
-        <button type="submit">Register</button>
-      </form>
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
 
-      {error && <p className="error">{error}</p>}
-      {message && <p className="success">{message}</p>}
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+
+          <select
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+          >
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
+
+          <button type="submit">Register</button>
+
+        </form>
+
+        {error && <p className="error">{error}</p>}
+        {message && <p className="success">{message}</p>}
+
+      </div>
+
     </div>
   );
 }
+
+export default Register;
