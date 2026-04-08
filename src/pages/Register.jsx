@@ -1,111 +1,126 @@
-// src/pages/Register.jsx
+import React, { useState } from "react";
+import api from "../api";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import "../App.css";
+const Register = () => {
 
-function Register() {
-
-  const navigate = useNavigate();
-  const { register } = useAuth();
-
-  const [form, setForm] = useState({
+  const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
-    role: "student",
+    role: "STUDENT"
   });
 
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState("");
+
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{6,}$/;
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
+    const { name, value } = e.target;
+
+    setUser({
+      ...user,
+      [name]: value
     });
+
+    if (name === "password") {
+      if (value.length === 0) {
+        setPasswordMsg("");
+      } else if (!passwordRegex.test(value)) {
+        setPasswordMsg("Password must contain uppercase, number & special char");
+      } else {
+        setPasswordMsg("Strong Password");
+      }
+    }
   };
 
-  const handleRegister = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const success = register(
-      form.name,
-      form.email,
-      form.password,
-      form.role
-    );
-
-    if (!success) {
-      setError("User already exists");
+    if (!passwordRegex.test(user.password)) {
+      alert("Invalid password");
       return;
     }
 
-    setError("");
-    setMessage("Registered Successfully ✅");
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 1500);
+    api.post("/auth/register", user)
+      .then(() => alert("Registered Successfully!"))
+      .catch(err => console.log(err));
   };
 
   return (
-    <div className="login-container">
+    <>
+      <style>{`
+        .register-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 90vh;
+        }
 
-      <div className="login-box">
+        .register-box {
+          background: #f5f5f5;
+          padding: 30px;
+          border-radius: 12px;
+          width: 350px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          text-align: center;
+        }
 
-        <h2 className="form-title">Register</h2>
+        .register-box h2 {
+          margin-bottom: 20px;
+        }
 
-        <form onSubmit={handleRegister} className="login-form">
+        .register-box input,
+        .register-box select {
+          width: 100%;
+          padding: 10px;
+          margin: 10px 0;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+        }
 
-          <input
-            name="name"
-            placeholder="Name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
+        .register-box button {
+          width: 100%;
+          padding: 10px;
+          background: #3b82c4;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          margin-top: 10px;
+        }
 
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
+        .register-box button:hover {
+          background: #2f6ea3;
+        }
 
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
+        .msg {
+          font-size: 12px;
+        }
+      `}</style>
 
-          <select
-            name="role"
-            value={form.role}
-            onChange={handleChange}
-          >
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-            <option value="admin">Admin</option>
+      <div className="register-container">
+        <div className="register-box">
+
+          <h2>Register</h2>
+
+          <input name="name" placeholder="Name" onChange={handleChange} />
+          <input name="email" placeholder="Email" onChange={handleChange} />
+          <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+
+          {/* Password message */}
+          {passwordMsg && <p className="msg">{passwordMsg}</p>}
+
+          <select name="role" onChange={handleChange}>
+            <option value="STUDENT">Student</option>
+            <option value="TEACHER">Teacher</option>
           </select>
 
-          <button type="submit">Register</button>
+          <button onClick={handleSubmit}>Register</button>
 
-        </form>
-
-        {error && <p className="error">{error}</p>}
-        {message && <p className="success">{message}</p>}
-
+        </div>
       </div>
-
-    </div>
+    </>
   );
-}
+};
 
 export default Register;

@@ -16,17 +16,17 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import StudentDashboard from "./pages/StudentDashboard";
 import TeacherDashboard from "./pages/TeacherDashboard";
-import Courses from "./pages/Courses";
-import Marks from "./pages/Marks";
-import Feedback from "./pages/Feedback";
-import Upload from "./pages/Upload";
+import Courses from "./pages/Courses";     // 👈 will be Assign Course
+import Marks from "./pages/Marks";         // 👈 Give Marks
+import Feedback from "./pages/Feedback";   // 👈 Give Feedback
+import Upload from "./pages/Upload";       // 👈 Upload Assignment
 import ForgotPassword from "./pages/ForgotPassword";
+import ViewUploads from "./components/ViewUploads";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
-        {/* Background Wrapper */}
         <div
           className="app-background"
           style={{
@@ -40,6 +40,7 @@ function App() {
           <Navbar />
 
           <Routes>
+            {/* Home */}
             <Route path="/" element={<Home />} />
 
             {/* Auth */}
@@ -51,11 +52,14 @@ function App() {
             <Route path="/student" element={<StudentDashboard />} />
             <Route path="/teacher" element={<TeacherDashboard />} />
 
-            {/* Features */}
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/marks" element={<Marks />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/upload" element={<Upload />} />
+            {/* Teacher Features */}
+            <Route path="/courses" element={<Courses />} />       {/* Assign Course */}
+            <Route path="/marks" element={<Marks />} />           {/* Give Marks */}
+            <Route path="/feedback" element={<Feedback />} />     {/* Give Feedback */}
+            <Route path="/upload" element={<Upload />} />         {/* Upload Assignment */}
+
+            {/* Extra */}
+            <Route path="/view-projects" element={<ViewUploads />} />
           </Routes>
         </div>
       </Router>

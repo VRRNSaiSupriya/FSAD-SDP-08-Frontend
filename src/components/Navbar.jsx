@@ -14,7 +14,6 @@ const Navbar = () => {
     <>
       <style>
         {`
-        /* NAVBAR ONLY */
         .navbar{
           display:flex;
           justify-content:space-between;
@@ -24,40 +23,24 @@ const Navbar = () => {
           color:white;
         }
 
-        .navbar h2{
-          margin:0;
-          font-size:22px;
-        }
-
-        .navbar .nav-links{
+        .nav-links{
           display:flex;
+          gap:20px;
           align-items:center;
-          gap:25px;
         }
 
-        .navbar .nav-links a{
+        .nav-links a{
           color:white;
           text-decoration:none;
-          font-size:17px;
-          font-weight:500;
         }
 
-        .navbar .nav-links a:hover{
-          text-decoration:underline;
-        }
-
-        .navbar .logout-btn{
-          background:none;
+        .logout-btn{
+          background:red;
           border:none;
+          padding:6px 12px;
           color:white;
-          font-size:17px;
-          font-weight:500;
+          border-radius:5px;
           cursor:pointer;
-          font-family:inherit;
-        }
-
-        .navbar .logout-btn:hover{
-          text-decoration:underline;
         }
         `}
       </style>
@@ -68,6 +51,7 @@ const Navbar = () => {
         <div className="nav-links">
           <Link to="/">Home</Link>
 
+          {/* NOT LOGGED IN */}
           {!user && (
             <>
               <Link to="/login">Login</Link>
@@ -75,26 +59,18 @@ const Navbar = () => {
             </>
           )}
 
-          {user?.role === "student" && (
+          {/* LOGGED IN */}
+          {user && (
             <>
-              <Link to="/student">Dashboard</Link>
+              {user.role === "student" && <Link to="/student">Dashboard</Link>}
+              {user.role === "teacher" && <Link to="/teacher">Dashboard</Link>}
+
               <Link to="/courses">Courses</Link>
               <Link to="/marks">Marks</Link>
               <Link to="/feedback">Feedback</Link>
 
-              <button className="logout-btn" onClick={handleLogout}>
-                Logout
-              </button>
-            </>
-          )}
-
-          {user?.role === "teacher" && (
-            <>
-              <Link to="/teacher">Dashboard</Link>
-              <Link to="/upload">Assign Marks</Link>
-              <Link to="/courses">Courses</Link>
-
-              <button className="logout-btn" onClick={handleLogout}>
+              {/* 🔥 LOGOUT BUTTON */}
+              <button onClick={handleLogout} className="logout-btn">
                 Logout
               </button>
             </>

@@ -1,34 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import api from "../api";
 
 const Portfolio = () => {
-  const projects = [
-    {
-      title: "Student Management System",
-      description: "Web application to manage student records and marks.",
-    },
-    {
-      title: "AI Maze Solver",
-      description: "Solved maze problems using BFS, DFS and A* algorithms.",
-    },
-    {
-      title: "Portfolio Website",
-      description: "Personal portfolio built using React and CSS.",
-    },
-  ];
+
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    api.get("/projects")
+      .then(res => {
+        setProjects(res.data);
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <div className="page-container">
-      <h2>Review Projects</h2>
+      <h2>Projects</h2>
 
-      <div className="project-container">
-        {projects.map((project, index) => (
-          <div key={index} className="project-card">
-            <h3>{project.title}</h3>
-            <p>{project.description}</p>
-            <button className="review-btn">Review</button>
-          </div>
-        ))}
-      </div>
+      {projects.map((project, index) => (
+        <div key={index} className="project-card">
+          <h3>{project.title}</h3>
+          <p>{project.description}</p>
+        </div>
+      ))}
     </div>
   );
 };

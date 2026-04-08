@@ -1,52 +1,57 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import api from "../api";
 import "../App.css";
 
 const Login = () => {
 
   const navigate = useNavigate();
-  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "student",
+    role: "STUDENT"
   });
 
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
   };
 
   const handleLogin = (e) => {
-
     e.preventDefault();
 
-    const role = login(formData.email, formData.password);
+    api.post("/auth/login", {
+      email: formData.email,
+      password: formData.password
+    })
+    .then((res) => {
 
-    if (role && role === formData.role) {
+      const user = res.data;
 
-      if (role === "student") navigate("/student");
-      else if (role === "teacher") navigate("/teacher");
-      else if (role === "admin") navigate("/admin");
+      // ROLE CHECK
+      if (user.role === formData.role) {
 
-    } else {
+        if (user.role === "STUDENT") navigate("/student");
+        else if (user.role === "TEACHER") navigate("/teacher");
+        else if (user.role === "ADMIN") navigate("/admin");
 
-      setError("Invalid credentials or role mismatch");
+      } else {
+        setError("Role mismatch!");
+      }
 
-    }
+    })
+    .catch(() => {
+      setError("Invalid email or password");
+    });
   };
 
   return (
-
     <div className="login-container">
-
       <div className="login-box">
 
         <h2>Login to PORTFOLIO-HUB</h2>
@@ -76,9 +81,9 @@ const Login = () => {
             value={formData.role}
             onChange={handleChange}
           >
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-            <option value="admin">Admin</option>
+            <option value="STUDENT">Student</option>
+            <option value="TEACHER">Teacher</option>
+            <option value="ADMIN">Admin</option>
           </select>
 
           {error && <p className="error">{error}</p>}
@@ -92,7 +97,6 @@ const Login = () => {
         </p>
 
       </div>
-
     </div>
   );
 };
